@@ -18,11 +18,19 @@ export function useCustomize() {
 
   const themeClass = computed(() => `theme-${config.value.theme}`)
 
+  function setCSSVar(name: string) {
+    const theme = themes.find(theme => theme.name === name)
+    for (const key in theme?.cssVars[isDark ? 'dark' : 'light']) {
+      document.body.style.setProperty(`--${key}`, theme.cssVars[isDark ? 'dark' : 'light'][key])
+    }
+  }
+
   const theme = computed(() => config.value.theme)
   const radius = computed(() => config.value.radius)
 
   function setTheme(themeName: Theme['name']) {
     config.value.theme = themeName
+    setCSSVar(themeName)
   }
 
   function setRadius(newRadius: number) {
